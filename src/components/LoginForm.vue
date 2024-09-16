@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center font-sans">
+  <div class="flex flex-col items-center justify-center mt-[20vh] font-sans">
     <h1 class="text-4xl text-gray-800 mb-6">Login</h1>
     <form
       @submit.prevent="login"

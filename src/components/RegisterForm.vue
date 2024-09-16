@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center font-sans">
+  <div class="flex flex-col items-center justify-center mt-[20vh] font-sans">
     <h1 class="text-4xl text-gray-800 mb-6">Register</h1>
     <form
       @submit.prevent="getUserCoordinates"
@@ -25,6 +25,10 @@
       />
       <input v-model="latitude" type="text" hidden />
       <input v-model="longitude" type="text" hidden />
+      <p class="mb-4">
+        Already have an account?
+        <router-link to="/login" class="text-blue-500">Login</router-link>
+      </p>
       <button
         type="submit"
         class="w-3/5 p-3 bg-blue-500 text-white text-base rounded-full transition-colors duration-300 hover:bg-blue-700 shadow-md"

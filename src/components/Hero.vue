@@ -11,12 +11,11 @@
           cupiditate similique alias expedita dolorem voluptatibus aut suscipit
           id reprehenderit temporibus animi commodi.
         </p>
-        <a
-          href="/register"
+        <router-link
+          to="/register"
           class="get-started-button block text-center text-white w-[150px] bg-[#5208b6] rounded-[30px] py-2 mt-8 no-underline transition-colors duration-300 hover:bg-[#8a16db]"
+          >Get Started</router-link
         >
-          Get Started
-        </a>
       </div>
       <div class="right p-5">
         <img
