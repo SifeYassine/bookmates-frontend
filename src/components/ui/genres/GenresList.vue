@@ -1,23 +1,6 @@
 <template>
-  <div class="flex">
-    <!-- SideBar -->
-    <SideBar />
+  <div class="list flex border-red-500 border-2">
     <div>
-      <h1>Genres</h1>
-
-      <!-- Search Bar Component -->
-      <SearchBar @search="handleSearch" />
-
-      <button
-        @click="showAddModal = true"
-        class="p-3 px-5 mb-3 bg-[#007bff] border-none rounded-[50px] text-white text-[1rem] cursor-pointer shadow-md hover:bg-[#0069d9]"
-      >
-        Add Genre
-      </button>
-
-      <!-- Add Genre Modal -->
-      <AddGenreModal :showModal="showAddModal" @close="showAddModal = false" />
-
       <!-- Edit Genre Modal -->
       <EditGenreModal
         :showModal="showEditModal"
@@ -25,10 +8,13 @@
         @close="showEditModal = false"
       />
 
-      <ul class="list-none p-0 px-[8vw] grid grid-cols-3 gap-5">
+      <ul
+        class="w-full list-none p-0 px-[8vw] grid gap-5"
+        style="grid-template-columns: repeat(6, 1fr)"
+      >
         <li v-for="genre in filteredGenres" :key="genre.id">
           <h2>{{ genre.name }}</h2>
-          <div class="w-full flex justify-center gap-3 mt-5">
+          <!-- <div class="w-full flex justify-center gap-3 mt-5">
             <button
               @click="editGenre(genre)"
               class="w-1/4 p-3 mr-3 mb-3 bg-[#007bff] rounded-[50px] border-none text-white text-[1rem] cursor-pointer shadow-md hover:bg-[#0069d9]"
@@ -41,7 +27,7 @@
             >
               Delete
             </button>
-          </div>
+          </div> -->
         </li>
       </ul>
     </div>
@@ -51,23 +37,16 @@
 <script>
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import AddGenreModal from "./AddGenreModal.vue";
 import EditGenreModal from "./EditGenreModal.vue";
-import SearchBar from "./SearchBar.vue";
-import SideBar from "./SideBar.vue";
 
 export default {
   components: {
-    AddGenreModal,
     EditGenreModal,
-    SearchBar,
-    SideBar,
   },
   setup() {
     const store = useStore();
     const genres = computed(() => store.state.genres);
 
-    const showAddModal = ref(false);
     const showEditModal = ref(false);
     const selectedGenre = ref(null);
     const searchQuery = ref("");
@@ -108,7 +87,6 @@ export default {
       filteredGenres,
       deleteGenre,
       editGenre,
-      showAddModal,
       showEditModal,
       selectedGenre,
       handleSearch,
@@ -116,3 +94,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.list {
+  width: 75%;
+  margin: 10% 0 0 22%;
+  border-radius: 20px;
+  border: 1px solid red;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+</style>

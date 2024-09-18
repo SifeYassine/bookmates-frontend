@@ -1,5 +1,5 @@
 <template>
-  <main class="w-[92vw] mx-auto my-0">
+  <main class="w-[92vw] mx-auto mt-40">
     <section class="hero grid m-7" style="grid-template-columns: 1fr 1fr">
       <div class="left text-left mt-10 px-16 py-0">
         <h1 class="hero-title text-6xl font-bold mx-0 my-7">
@@ -19,7 +19,7 @@
       </div>
       <div class="right p-5">
         <img
-          src="@/assets/hero.png"
+          src="@/assets/images/hero.png"
           alt="Hero Image"
           class="hero-image w-[100%] rounded-xl"
         />

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header />
     <Hero />
     <Footer />
   </div>
@@ -8,12 +9,14 @@
 <script>
 import "@/assets/style.css";
 import "@/assets/globalStyle.css";
-import Hero from "@/components/Hero.vue";
-import Footer from "@/components/Footer.vue";
+import Header from "@/components/ui/cores/Header.vue";
+import Hero from "@/components/ui/cores/Hero.vue";
+import Footer from "@/components/ui/cores/Footer.vue";
 
 export default {
   name: "Home",
   components: {
+    Header,
     Hero,
     Footer,
   },

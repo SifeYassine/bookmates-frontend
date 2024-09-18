@@ -1,16 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/components/Home.vue";
-import Login from "@/components/LoginForm.vue";
-import Register from "@/components/RegisterForm.vue";
-import Genres from "@/components/GenresList.vue";
-import AdminPanel from "@/components/AdminPanel.vue";
+import Home from "@/components/pages/home/Home.vue";
+import Login from "@/components/pages/auth/LoginForm.vue";
+import Register from "@/components/pages/auth/RegisterForm.vue";
+import Genres from "@/components/pages/genres/Genres.vue";
 
 const routes = [
   { path: "/", component: Home },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/genres", component: Genres },
-  { path: "/admin", component: AdminPanel },
 ];
 
 const router = createRouter({
