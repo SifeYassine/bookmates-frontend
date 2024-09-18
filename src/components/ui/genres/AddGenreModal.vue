@@ -13,7 +13,7 @@
           label="Name"
           label-float
           required
-          class="w-[326px]"
+          style="width: 326px"
         >
           <template #icon> # </template>
         </vs-input>
