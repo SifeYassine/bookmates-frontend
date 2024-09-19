@@ -1,41 +1,16 @@
 <template>
-  <div class="list flex border-red-500 border-2">
-    <div>
-      <!-- Edit Genre Modal -->
-      <EditGenreModal
-        :showModal="showEditModal"
-        :genre="selectedGenre"
-        @close="showEditModal = false"
-      />
-
-      <ul
-        class="w-full list-none p-0 px-[8vw] grid gap-5"
-        style="grid-template-columns: repeat(6, 1fr)"
-      >
-        <li v-for="genre in filteredGenres" :key="genre.id">
-          <h2>{{ genre.name }}</h2>
-          <!-- <div class="w-full flex justify-center gap-3 mt-5">
-            <button
-              @click="editGenre(genre)"
-              class="w-1/4 p-3 mr-3 mb-3 bg-[#007bff] rounded-[50px] border-none text-white text-[1rem] cursor-pointer shadow-md hover:bg-[#0069d9]"
-            >
-              Edit
-            </button>
-            <button
-              @click="deleteGenre(genre.id)"
-              class="w-1/4 p-3 mb-3 bg-[#dc3545] rounded-[50px] border-none text-white text-[1rem] cursor-pointer shadow-md hover:bg-[#c82333]"
-            >
-              Delete
-            </button>
-          </div> -->
-        </li>
-      </ul>
-    </div>
-  </div>
+  <ul
+    class="list list-none p-0 px-[8vw] grid gap-5"
+    style="grid-template-columns: repeat(6, 1fr)"
+  >
+    <li v-for="genre in filteredGenres" :key="genre.id">
+      <h2>{{ genre.name }}</h2>
+    </li>
+  </ul>
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import EditGenreModal from "./EditGenreModal.vue";
 
@@ -46,26 +21,21 @@ export default {
   setup() {
     const store = useStore();
     const genres = computed(() => store.state.genres);
-
-    const showEditModal = ref(false);
+    const searchQuery = computed(() => store.state.searchQuery);
     const selectedGenre = ref(null);
-    const searchQuery = ref("");
-
-    async function fetchGenres() {
-      store.dispatch("fetchGenres");
-    }
+    const showEditModal = ref(false);
 
     const filteredGenres = computed(() => {
       if (!searchQuery.value) {
         return genres.value;
       }
       return genres.value.filter((genre) =>
-        genre.name.includes(searchQuery.value)
+        genre.name.toLowerCase().includes(searchQuery.value.toLowerCase())
       );
     });
 
-    function handleSearch(query) {
-      searchQuery.value = query;
+    async function fetchGenres() {
+      store.dispatch("fetchGenres");
     }
 
     async function editGenre(genre) {
@@ -89,7 +59,6 @@ export default {
       editGenre,
       showEditModal,
       selectedGenre,
-      handleSearch,
     };
   },
 };
@@ -98,7 +67,7 @@ export default {
 <style scoped>
 .list {
   width: 75%;
-  margin: 10% 0 0 22%;
+  margin: 2% 0 0 22%;
   border-radius: 20px;
   border: 1px solid red;
   z-index: 1000;

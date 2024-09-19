@@ -9,6 +9,8 @@
       <div class="flex flex-col gap-5 items-center">
         <vs-input
           v-model="newGenre.name"
+          @keyup.enter="submitForm()"
+          type="text"
           color="primary"
           label="Name"
           label-float
@@ -38,12 +40,17 @@ export default {
       try {
         await store.dispatch("addGenre", newGenre.value);
         newGenre.value = { name: "" };
+        closeModal();
       } catch (error) {
         console.error("Failed to add genre:", error);
       }
     }
 
-    return { active, newGenre, submitForm };
+    function closeModal() {
+      active.value = false;
+    }
+
+    return { active, newGenre, submitForm, closeModal };
   },
 };
 </script>

@@ -1,26 +1,32 @@
 <template>
-  <div class="search-bar m-auto mb-8 w-[60%]">
-    <input
+  <div class="ml-6 mb-6">
+    <vs-input
       v-model="query"
       @keyup.enter="search"
       type="text"
-      placeholder="Search..."
-      class="search-input w-3/5 p-3 border-2 border-gray-300 rounded-lg text-base text-gray-800 outline-none bg-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-    />
+      color="primary"
+      label="Search..."
+      label-float
+      required
+      style="width: 350px"
+    >
+      <template #icon> &#x1F50E;&#xFE0E; </template>
+    </vs-input>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "SearchBar",
-  emits: ["search"],
-  setup(props, { emit }) {
+  setup() {
+    const store = useStore();
     const query = ref("");
 
     function search() {
-      emit("search", query.value);
+      store.dispatch("searchQuery", query.value);
     }
 
     return {

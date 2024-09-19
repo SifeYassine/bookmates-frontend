@@ -8,6 +8,7 @@ export default createStore({
     role_id: null,
     genres: [],
     token: localStorage.getItem("token") || "",
+    searchQuery: "",
   },
   mutations: {
     setUsers(state, users) {
@@ -23,6 +24,9 @@ export default createStore({
       state.token = token;
       state.role_id = role_id;
       localStorage.setItem("token", token);
+    },
+    setSearchQuery(state, query) {
+      state.searchQuery = query;
     },
 
     clearToken(state) {
@@ -68,10 +72,13 @@ export default createStore({
     async logout({ commit }) {
       await axios.post("/auth/logout");
       commit("clearToken");
-      commit("clearProducts");
-      commit("cleargenres");
+      commit("clearGenres");
       commit("clearUsers");
       commit("clearRoles");
+    },
+
+    searchQuery({ commit }, query) {
+      commit("setSearchQuery", query);
     },
 
     // Users CRUD
