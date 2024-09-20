@@ -2,24 +2,21 @@
   <div>
     <SideBar />
     <NavBar />
-    <AddGenreModal class="add-genre-modal" />
-    <GenresList />
+    <BookPostsList />
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/ui/cores/NavBar.vue";
 import SideBar from "@/components/ui/cores/SideBar.vue";
-import AddGenreModal from "@/components/ui/genres/AddGenreModal.vue";
-import GenresList from "@/components/ui/genres/GenresList.vue";
+import BookPostsList from "@/components/ui/bookposts/BookPostsList.vue";
 
 export default {
-  name: "Genres",
+  name: "BookPosts",
   components: {
     SideBar,
     NavBar,
-    AddGenreModal,
-    GenresList,
+    BookPostsList,
   },
 };
 </script>

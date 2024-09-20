@@ -5,6 +5,7 @@ import Home from "@/components/pages/home/Home.vue";
 import Login from "@/components/pages/auth/LoginForm.vue";
 import Register from "@/components/pages/auth/RegisterForm.vue";
 import Genres from "@/components/pages/genres/Genres.vue";
+import BookPosts from "@/components/pages/bookposts/BookPosts.vue";
 import NotFound from "@/components/pages/notFound/NotFound.vue";
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/genres", component: Genres },
+  { path: "/book_posts", component: BookPosts },
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",

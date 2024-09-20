@@ -7,6 +7,8 @@ export default createStore({
     roles: [],
     role_id: null,
     genres: [],
+    books: [],
+    bookPosts: [],
     token: localStorage.getItem("token") || "",
     searchQuery: "",
   },
@@ -19,6 +21,12 @@ export default createStore({
     },
     setGenres(state, genres) {
       state.genres = genres;
+    },
+    setBooks(state, books) {
+      state.books = books;
+    },
+    setBookPosts(state, bookPosts) {
+      state.bookPosts = bookPosts;
     },
     setToken(state, { token, role_id }) {
       state.token = token;
@@ -42,6 +50,12 @@ export default createStore({
     },
     clearGenres(state) {
       state.genres = [];
+    },
+    clearBooks() {
+      state.books = [];
+    },
+    clearBookPosts(state) {
+      state.bookPosts = [];
     },
   },
   actions: {
@@ -75,6 +89,8 @@ export default createStore({
       commit("clearGenres");
       commit("clearUsers");
       commit("clearRoles");
+      commit("clearBooks");
+      commit("clearBookPosts");
     },
 
     searchQuery({ commit }, query) {
@@ -170,9 +186,44 @@ export default createStore({
         console.error("Failed to delete genre:", error);
       }
     },
+
+    // Books CRUD
+    async fetchBooks({ commit }) {
+      try {
+        const { data } = await axios.get("books/index");
+        commit("setBooks", data.books);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    // Book Posts CRUD
+    async fetchBookPosts({ commit }) {
+      try {
+        const { data } = await axios.get("book_posts/index");
+        commit("setBookPosts", data.bookPosts);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   getters: {
     isAuthenticated: (state) => state.token,
     isAdmin: (state) => state.role_id === 1,
+    getBooks: (state) => {
+      return state.bookPosts.map((bookPost) => {
+        const offeredBook = state.books.find(
+          (book) => book.id === bookPost.offeredBook_id
+        );
+        const wishedBook = state.books.find(
+          (book) => book.id === bookPost.wishedBook_id
+        );
+        return {
+          ...bookPost,
+          offeredBook,
+          wishedBook,
+        };
+      });
+    },
   },
 });

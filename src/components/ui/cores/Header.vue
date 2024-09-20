@@ -14,6 +14,9 @@
     <!-- login, register and logout buttons -->
     <template #right>
       <router-link to="/genres" class="text-red-500"> Genres </router-link>
+      <router-link to="/book_posts" class="text-red-500">
+        Book Posts
+      </router-link>
       <vs-button type="flat" v-if="!isAuthenticated">
         <router-link to="/login" class="text-white"> Login </router-link>
       </vs-button>
