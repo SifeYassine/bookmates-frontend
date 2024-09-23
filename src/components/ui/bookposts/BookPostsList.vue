@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -26,7 +26,7 @@ export default {
     const bookPosts = computed(() => store.getters.getBooks);
     const searchQuery = computed(() => store.state.searchQuery);
 
-    const baseURL = ref("http://127.0.0.1:8000");
+    const baseURL = "http://127.0.0.1:8000";
 
     const filteredBookPosts = computed(() => {
       if (!searchQuery.value) {
@@ -62,7 +62,7 @@ export default {
 <style scoped>
 .list {
   width: 75%;
-  margin: 10% 0 0 22%;
+  margin: 2% 0 0 22%;
   border-radius: 20px;
   border: 1px solid red;
   z-index: 1000;

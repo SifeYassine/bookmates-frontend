@@ -1,37 +1,48 @@
 <template>
   <vs-sidebar v-model="active" absolute open class="sidebar">
     <div class="items">
-      <vs-sidebar-item id="home">
+      <vs-sidebar-item id="home" to="/">
         <template #icon>
-          <i class="bx bx-home" />
+          <i class="bx bx-home-alt-2" />
         </template>
-        <router-link to="/"> Home </router-link>
+        Home
       </vs-sidebar-item>
-      <vs-sidebar-item id="market">
+      <vs-sidebar-item id="book_posts" to="/book_posts">
         <template #icon>
           <i class="bx bx-grid-alt" />
         </template>
-        Market Overview
+        Book Posts
       </vs-sidebar-item>
-      <vs-sidebar-item id="Music">
+      <vs-sidebar-item v-if="isAdmin" id="genres" to="/genres">
         <template #icon>
-          <i class="bx bxs-music" />
+          <i class="bx bx-tag" />
         </template>
-        Music
+        Genres
       </vs-sidebar-item>
     </div>
   </vs-sidebar>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
-    const active = ref("home");
+    const active = ref("book_posts");
+    const store = useStore();
+    const route = useRoute();
+    const isAdmin = computed(() => store.getters.isAdmin);
+
+    const path = route.path;
+    if (path) {
+      active.value = path.split("/")[1];
+    }
 
     return {
       active,
+      isAdmin,
     };
   },
 };

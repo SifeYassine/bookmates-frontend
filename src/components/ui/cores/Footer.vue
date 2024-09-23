@@ -49,24 +49,18 @@
             >Home</a
           >
           <a href="#" class="text-white no-underline hover:text-purple-300"
-            >Pricing</a
-          >
-          <a href="#" class="text-white no-underline hover:text-purple-300"
-            >Products</a
-          >
-          <a href="#" class="text-white no-underline hover:text-purple-300"
-            >About</a
+            >About Us</a
           >
         </div>
         <div class="flex flex-col gap-3">
           <a href="#" class="text-white no-underline hover:text-purple-300"
-            >Careers</a
-          >
-          <a href="#" class="text-white no-underline hover:text-purple-300"
-            >Community</a
+            >FAQ</a
           >
           <a href="#" class="text-white no-underline hover:text-purple-300"
             >Privacy Policy</a
+          >
+          <a href="#" class="text-white no-underline hover:text-purple-300"
+            >Terms of Service</a
           >
         </div>
       </div>

@@ -1,30 +1,26 @@
 <template>
   <vs-navbar v-model="active" center-collapsed class="navbar">
     <template #left>
-      <img src="@/assets/logos/logo.png" class="w-[100px]" alt="Logo" />
+      <img src="@/assets/logos/logo.png" class="h-[100px]" alt="Logo" />
     </template>
 
     <vs-navbar-item id="guide" :active="active === 'guide'">
-      Guide
+      <a href="#guide">How it works</a>
     </vs-navbar-item>
-    <vs-navbar-item id="docs" :active="active === 'docs'">
-      Documents
+    <vs-navbar-item id="about" :active="active === 'about'">
+      About Us
     </vs-navbar-item>
 
     <!-- login, register and logout buttons -->
     <template #right>
-      <router-link to="/genres" class="text-red-500"> Genres </router-link>
-      <router-link to="/book_posts" class="text-red-500">
-        Book Posts
-      </router-link>
+      <vs-button v-if="isAuthenticated">
+        <router-link to="/book_posts" class="text-white"> Explore </router-link>
+      </vs-button>
       <vs-button type="flat" v-if="!isAuthenticated">
         <router-link to="/login" class="text-white"> Login </router-link>
       </vs-button>
       <vs-button v-if="!isAuthenticated">
         <router-link to="/register" class="text-white"> Register </router-link>
-      </vs-button>
-      <vs-button v-else @click="logout" color="danger" class="text-white">
-        Logout
       </vs-button>
     </template>
   </vs-navbar>

@@ -44,7 +44,7 @@ export default {
         email: email.value,
         password: password.value,
       });
-      router.push("/");
+      router.push("/book_posts");
     };
 
     return { email, password, login };

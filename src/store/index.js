@@ -5,6 +5,7 @@ export default createStore({
   state: {
     users: [],
     roles: [],
+    user_id: null,
     role_id: null,
     genres: [],
     books: [],
@@ -25,22 +26,35 @@ export default createStore({
     setBooks(state, books) {
       state.books = books;
     },
+    addNewBookToState(state, newBook) {
+      state.books.push(newBook);
+    },
     setBookPosts(state, bookPosts) {
       state.bookPosts = bookPosts;
     },
-    setToken(state, { token, role_id }) {
+    setTokenIds(state, { token, user_id, role_id }) {
       state.token = token;
+      state.user_id = user_id;
       state.role_id = role_id;
       localStorage.setItem("token", token);
+    },
+    setUserIds(state, { user_id, role_id }) {
+      state.user_id = user_id;
+      state.role_id = role_id;
     },
     setSearchQuery(state, query) {
       state.searchQuery = query;
     },
 
-    clearToken(state) {
+    clearTokenIds(state) {
       state.token = "";
+      state.user_id = null;
       state.role_id = null;
       localStorage.removeItem("token");
+    },
+    clearUserIds(state) {
+      state.user_id = null;
+      state.role_id = null;
     },
     clearUsers(state) {
       state.users = [];
@@ -64,19 +78,29 @@ export default createStore({
         const { data } = await axios.post("/auth/register", credentials);
         console.log("User registered successfully:", data.user.name);
       } catch (error) {
-        console.error(
-          "Registration failed:",
-          error.response?.data || error.message
-        );
+        console.error(error);
       }
     },
 
     async login({ commit }, credentials) {
       try {
         const { data } = await axios.post("/auth/login", credentials);
-        commit("setToken", {
+        commit("setTokenIds", {
           token: data.access_token,
+          user_id: data.user.id,
           role_id: data.user.role_id,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async loggedUser({ commit }) {
+      try {
+        const { data } = await axios.post("/auth/me");
+        commit("setUserIds", {
+          user_id: data.id,
+          role_id: data.role_id,
         });
       } catch (error) {
         console.error(error);
@@ -85,7 +109,8 @@ export default createStore({
 
     async logout({ commit }) {
       await axios.post("/auth/logout");
-      commit("clearToken");
+      commit("clearTokenIds");
+      commit("clearUserIds");
       commit("clearGenres");
       commit("clearUsers");
       commit("clearRoles");
@@ -197,6 +222,36 @@ export default createStore({
       }
     },
 
+    async addBook({ commit, state }, book) {
+      try {
+        // Create a FormData object
+        const formData = new FormData();
+        let newBook;
+
+        //Loop through the book object to append all fields to FormData
+        Object.entries(book).forEach(([key, value]) => {
+          if (value != null) {
+            formData.append(key, value);
+          }
+        });
+
+        //Make the API request with the FormData object
+        const { data } = await axios.post("books/create", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${state.token}`,
+          },
+        });
+
+        newBook = data.Book;
+
+        // Commit the newly added book to the state
+        commit("addNewBookToState", newBook);
+      } catch (error) {
+        console.error("Failed to add book:", error);
+      }
+    },
+
     // Book Posts CRUD
     async fetchBookPosts({ commit }) {
       try {
@@ -206,8 +261,20 @@ export default createStore({
         console.error(error);
       }
     },
+
+    async addBookPost({ commit, state }, bookPost) {
+      try {
+        const { data } = await axios.post("book_posts/create", bookPost);
+        // Update the state with the newly added bookPost
+        commit("setBookPosts", [...state.bookPosts, data.bookPost]);
+      } catch (error) {
+        console.error("Failed to add bookPost:", error);
+      }
+    },
   },
   getters: {
+    userId: (state) => state.user_id,
+    roleId: (state) => state.role_id,
     isAuthenticated: (state) => state.token,
     isAdmin: (state) => state.role_id === 1,
     getBooks: (state) => {

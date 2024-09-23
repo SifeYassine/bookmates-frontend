@@ -8,7 +8,6 @@
 
 <script>
 import "@/assets/style.css";
-import "@/assets/globalStyle.css";
 import Header from "@/components/ui/cores/Header.vue";
 import Hero from "@/components/ui/cores/Hero.vue";
 import Footer from "@/components/ui/cores/Footer.vue";
