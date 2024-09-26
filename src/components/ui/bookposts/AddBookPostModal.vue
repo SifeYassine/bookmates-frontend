@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center">
     <vs-button @click="active = !active">Create Book Post</vs-button>
-    <vs-dialog v-model="active" width="50vw" overlay-blur>
+    <vs-dialog v-model="active" width="50vw">
       <template #header>
         <h3>Create Book Exchange Post</h3>
       </template>

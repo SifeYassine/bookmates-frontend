@@ -1,30 +1,43 @@
 <template>
-  <ul
-    class="list list-none p-0 px-[8vw] grid gap-5"
-    style="grid-template-columns: repeat(5, 1fr)"
-  >
-    <li v-for="bookPost in filteredBookPosts" :key="bookPost.id">
-      <div v-if="bookPost.offeredBook" class="flex flex-col items-center">
-        <img
-          :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
-          alt="Book cover"
-        />
-        <h2>{{ bookPost.offeredBook.title }}</h2>
-        <p>By {{ bookPost.offeredBook.author }}</p>
-      </div>
-    </li>
-  </ul>
+  <div>
+    <ShowBookPostDetailsModal v-model="active" :bookPost="selectedBookPost" />
+    <ul
+      class="list list-none p-0 px-[8vw] grid gap-5"
+      style="grid-template-columns: repeat(5, 1fr)"
+    >
+      <li v-for="bookPost in filteredBookPosts" :key="bookPost.id">
+        <div
+          v-if="bookPost.offeredBook"
+          @click="getSelectedBookPost(bookPost.id)"
+          class="flex flex-col items-center cursor-pointer"
+        >
+          <img
+            :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
+            alt="Book cover"
+          />
+          <h2>{{ bookPost.offeredBook.title }}</h2>
+          <p>By {{ bookPost.offeredBook.author }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import { computed, onMounted } from "vue";
+import ShowBookPostDetailsModal from "./ShowBookPostDetailsModal.vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
+  components: {
+    ShowBookPostDetailsModal,
+  },
   setup() {
+    const active = ref(false);
     const store = useStore();
     const bookPosts = computed(() => store.getters.getBooks);
     const searchQuery = computed(() => store.state.searchQuery);
+    const selectedBookPost = computed(() => store.getters.getBookPost);
 
     const baseURL = "http://127.0.0.1:8000";
 
@@ -40,11 +53,15 @@ export default {
     });
 
     async function fetchData() {
-      // Fetch both bookPosts and books in parallel
       await Promise.all([
         store.dispatch("fetchBookPosts"),
         store.dispatch("fetchBooks"),
       ]);
+    }
+
+    async function getSelectedBookPost(id) {
+      await store.dispatch("getBookPostById", id);
+      active.value = true;
     }
 
     onMounted(fetchData);
@@ -54,6 +71,9 @@ export default {
       bookPosts,
       searchQuery,
       filteredBookPosts,
+      selectedBookPost,
+      active,
+      getSelectedBookPost,
     };
   },
 };

@@ -10,6 +10,7 @@ export default createStore({
     genres: [],
     books: [],
     bookPosts: [],
+    selectedBookPost: {},
     token: localStorage.getItem("token") || "",
     searchQuery: "",
   },
@@ -31,6 +32,9 @@ export default createStore({
     },
     setBookPosts(state, bookPosts) {
       state.bookPosts = bookPosts;
+    },
+    setBookPost(state, bookPost) {
+      state.selectedBookPost = bookPost;
     },
     setTokenIds(state, { token, user_id, role_id }) {
       state.token = token;
@@ -262,6 +266,15 @@ export default createStore({
       }
     },
 
+    async getBookPostById({ commit }, id) {
+      try {
+        const { data } = await axios.get(`book_posts/show/${id}`);
+        commit("setBookPost", data.bookPost);
+      } catch (error) {
+        console.error("Failed to fetch book post details:", error);
+      }
+    },
+
     async addBookPost({ commit, state }, bookPost) {
       try {
         const { data } = await axios.post("book_posts/create", bookPost);
@@ -292,5 +305,6 @@ export default createStore({
         };
       });
     },
+    getBookPost: (state) => state.selectedBookPost,
   },
 });

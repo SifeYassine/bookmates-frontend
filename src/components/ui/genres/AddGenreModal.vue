@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center">
     <vs-button @click="active = !active"> Create Genre </vs-button>
-    <vs-dialog v-model="active" width="20vw" overlay-blur>
+    <vs-dialog v-model="active" width="20vw">
       <template #header class="mt-6">
         <h4>Add Genre</h4>
       </template>
