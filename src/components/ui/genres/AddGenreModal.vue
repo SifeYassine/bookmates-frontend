@@ -1,6 +1,8 @@
 <template>
   <div class="flex justify-center items-center">
-    <vs-button @click="active = !active"> Create Genre </vs-button>
+    <vs-button @click="active = !active" color="#5208b6">
+      Create Genre
+    </vs-button>
     <vs-dialog v-model="active" width="20vw">
       <template #header class="mt-6">
         <h4>Add Genre</h4>
@@ -11,7 +13,7 @@
           v-model="newGenre.name"
           @keyup.enter="submitForm()"
           type="text"
-          color="primary"
+          color="#5208b6"
           label="Name"
           label-float
           required
@@ -20,7 +22,9 @@
           <template #icon> # </template>
         </vs-input>
 
-        <vs-button @click="submitForm()" class="w-[90%]">Add Genre</vs-button>
+        <vs-button @click="submitForm()" class="w-[90%]" color="#5208b6"
+          >Add Genre</vs-button
+        >
       </div>
     </vs-dialog>
   </div>

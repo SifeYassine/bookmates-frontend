@@ -10,11 +10,11 @@
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos
           molestias corrupti debitis, esse.
         </p>
-        <router-link
-          to="/register"
-          class="get-started-button block text-center text-white w-[150px] bg-[#5208b6] rounded-[30px] py-2 mt-8 no-underline transition-colors duration-300 hover:bg-[#8a16db]"
-          >Get Started</router-link
-        >
+        <vs-button color="#5208b6" style="margin-top: 20px">
+          <router-link to="/register" class="text-white">
+            Get Started
+          </router-link>
+        </vs-button>
       </div>
       <div class="right p-5">
         <img

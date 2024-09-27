@@ -13,13 +13,13 @@
 
     <!-- login, register and logout buttons -->
     <template #right>
-      <vs-button v-if="isAuthenticated">
+      <vs-button v-if="isAuthenticated" color="#5208b6">
         <router-link to="/book_posts" class="text-white"> Explore </router-link>
       </vs-button>
-      <vs-button type="flat" v-if="!isAuthenticated">
+      <vs-button type="flat" v-if="!isAuthenticated" color="#5208b6">
         <router-link to="/login" class="text-white"> Login </router-link>
       </vs-button>
-      <vs-button v-if="!isAuthenticated">
+      <vs-button v-if="!isAuthenticated" color="#5208b6">
         <router-link to="/register" class="text-white"> Register </router-link>
       </vs-button>
     </template>

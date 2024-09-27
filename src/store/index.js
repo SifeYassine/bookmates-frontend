@@ -257,19 +257,74 @@ export default createStore({
     },
 
     // Book Posts CRUD
-    async fetchBookPosts({ commit }) {
+    async fetchBookPosts({ commit, state }) {
       try {
         const { data } = await axios.get("book_posts/index");
-        commit("setBookPosts", data.bookPosts);
+        const mappedBookPosts = data.bookPosts.map((bookPost) => {
+          const offeredBook = state.books.find(
+            (book) => book.id === bookPost.offeredBook_id
+          );
+          const wishedBook = state.books.find(
+            (book) => book.id === bookPost.wishedBook_id
+          );
+
+          if (offeredBook) {
+            offeredBook.genre = state.genres.find(
+              (genre) => genre.id === offeredBook.genre_id
+            );
+          }
+          if (wishedBook) {
+            wishedBook.genre = state.genres.find(
+              (genre) => genre.id === wishedBook.genre_id
+            );
+          }
+
+          return {
+            ...bookPost,
+            offeredBook,
+            wishedBook,
+          };
+        });
+
+        commit("setBookPosts", mappedBookPosts);
       } catch (error) {
         console.error(error);
       }
     },
 
-    async getBookPostById({ commit }, id) {
+    async getBookPostById({ commit, state }, id) {
       try {
         const { data } = await axios.get(`book_posts/show/${id}`);
-        commit("setBookPost", data.bookPost);
+        const bookPost = data.bookPost;
+
+        // Find the offered and wished books
+        const offeredBook = state.books.find(
+          (book) => book.id === bookPost.offeredBook_id
+        );
+        const wishedBook = state.books.find(
+          (book) => book.id === bookPost.wishedBook_id
+        );
+
+        // Find the genres for offered and wished books
+        if (offeredBook) {
+          offeredBook.genre = state.genres.find(
+            (genre) => genre.id === offeredBook.genre_id
+          );
+        }
+        if (wishedBook) {
+          wishedBook.genre = state.genres.find(
+            (genre) => genre.id === wishedBook.genre_id
+          );
+        }
+
+        // Combine all information
+        const fullBookPost = {
+          ...bookPost,
+          offeredBook,
+          wishedBook,
+        };
+
+        commit("setBookPost", fullBookPost);
       } catch (error) {
         console.error("Failed to fetch book post details:", error);
       }
@@ -290,21 +345,7 @@ export default createStore({
     roleId: (state) => state.role_id,
     isAuthenticated: (state) => state.token,
     isAdmin: (state) => state.role_id === 1,
-    getBooks: (state) => {
-      return state.bookPosts.map((bookPost) => {
-        const offeredBook = state.books.find(
-          (book) => book.id === bookPost.offeredBook_id
-        );
-        const wishedBook = state.books.find(
-          (book) => book.id === bookPost.wishedBook_id
-        );
-        return {
-          ...bookPost,
-          offeredBook,
-          wishedBook,
-        };
-      });
-    },
+    getBooks: (state) => state.bookPosts,
     getBookPost: (state) => state.selectedBookPost,
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <vs-sidebar v-model="active" absolute open class="sidebar">
+  <vs-sidebar v-model="active" absolute open class="sidebar" color="#5208b6">
     <div class="items">
       <vs-sidebar-item id="home" to="/">
         <template #icon>

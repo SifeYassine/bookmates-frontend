@@ -1,7 +1,9 @@
 <template>
   <div class="flex justify-center items-center">
-    <vs-button @click="active = !active">Create Book Post</vs-button>
-    <vs-dialog v-model="active" width="50vw">
+    <vs-button @click="active = !active" color="#5208b6"
+      >Create Book Post</vs-button
+    >
+    <vs-dialog v-model="active" width="20vw">
       <template #header>
         <h3>Create Book Exchange Post</h3>
       </template>
@@ -14,24 +16,31 @@
           label="Title"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
           v-model="offeredBook.author"
           label="Author"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
           v-model="offeredBook.description"
           label="Description"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <div class="flex" style="margin-top: 20px">
-          <div v-if="offeredBook.cover_image_preview" class="image-preview">
+          <div
+            v-if="offeredBook.cover_image_preview"
+            class="image-preview"
+            style="margin-top: 10px"
+          >
             <img
               :src="offeredBook.cover_image_preview"
               alt="Preview"
@@ -49,7 +58,7 @@
               @change="onCoverImageChange($event, 'offered')"
               accept="image/*"
             />
-            <vs-button @click="triggerFileInput('offered')">
+            <vs-button @click="triggerFileInput('offered')" color="#5208b6">
               Choose File
             </vs-button>
             <span>{{
@@ -66,7 +75,8 @@
           label="Page Count"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
           v-model="offeredBook.published_year"
@@ -74,14 +84,16 @@
           label="Published Year"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
           v-model="offeredBook.isbn"
           label="ISBN"
           label-float
           required
-          color="primary"
+          color="#5208b6"
+          style="width: 350px"
         />
         <div class="center con-selects">
           <vs-select
@@ -89,7 +101,7 @@
             label="Genre"
             label-float
             required
-            color="primary"
+            color="#5208b6"
           >
             <vs-option
               v-for="genre in genres"
@@ -102,7 +114,9 @@
           </vs-select>
         </div>
 
-        <vs-button @click="handleOfferedBookNextStep">Next</vs-button>
+        <vs-button @click="handleOfferedBookNextStep" color="#5208b6"
+          >Next</vs-button
+        >
       </div>
 
       <!-- Step 2: Input Wished Book -->
@@ -113,21 +127,21 @@
           label="Title"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
         <vs-input
           v-model="wishedBook.author"
           label="Author"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
         <vs-input
           v-model="wishedBook.description"
           label="Description"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
 
         <div class="flex" style="margin-top: 20px">
@@ -149,7 +163,7 @@
               @change="onCoverImageChange($event, 'wished')"
               accept="image/*"
             />
-            <vs-button @click="triggerFileInput('wished')">
+            <vs-button @click="triggerFileInput('wished')" color="#5208b6">
               Choose File
             </vs-button>
             <span>{{
@@ -166,7 +180,7 @@
           label="Page Count"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
         <vs-input
           v-model="wishedBook.published_year"
@@ -174,14 +188,14 @@
           label="Published Year"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
         <vs-input
           v-model="wishedBook.isbn"
           label="ISBN"
           label-float
           required
-          color="primary"
+          color="#5208b6"
         />
         <div class="center con-selects">
           <vs-select
@@ -189,7 +203,7 @@
             label="Genre"
             label-float
             required
-            color="primary"
+            color="#5208b6"
           >
             <vs-option
               v-for="genre in genres"
@@ -203,8 +217,12 @@
         </div>
 
         <div class="flex gap-10 justify-center">
-          <vs-button @click="goToPreviousStep"> Previous </vs-button>
-          <vs-button @click="handleWishedBookNextStep"> Next </vs-button>
+          <vs-button @click="goToPreviousStep" color="#5208b6">
+            Previous
+          </vs-button>
+          <vs-button @click="handleWishedBookNextStep" color="#5208b6">
+            Next
+          </vs-button>
         </div>
       </div>
 
@@ -244,8 +262,10 @@
         </vs-select>
 
         <div class="flex gap-10 justify-center">
-          <vs-button @click="goToPreviousStep"> Previous </vs-button>
-          <vs-button @click="submitForm"> Submit </vs-button>
+          <vs-button @click="goToPreviousStep" color="#5208b6">
+            Previous
+          </vs-button>
+          <vs-button @click="submitForm" color="#5208b6"> Submit </vs-button>
         </div>
       </div>
     </vs-dialog>

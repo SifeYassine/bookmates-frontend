@@ -4,7 +4,7 @@
       v-model="query"
       @keyup.enter="search"
       type="text"
-      color="primary"
+      color="#5208b6"
       label="Search..."
       label-float
       required

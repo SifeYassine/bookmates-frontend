@@ -11,12 +11,31 @@
           @click="getSelectedBookPost(bookPost.id)"
           class="flex flex-col items-center cursor-pointer"
         >
-          <img
-            :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
-            alt="Book cover"
-          />
-          <h2>{{ bookPost.offeredBook.title }}</h2>
-          <p>By {{ bookPost.offeredBook.author }}</p>
+          <vs-card>
+            <template #title>
+              <h2>{{ bookPost.offeredBook.title }}</h2>
+            </template>
+            <template #img>
+              <img
+                :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
+                alt="Book cover"
+              />
+            </template>
+            <template #text>
+              <p>By {{ bookPost.offeredBook.author }}</p>
+            </template>
+            <template #interactions>
+              <vs-button color="#5208b6">
+                <i class="bx bx-tag" />
+                <span class="span" style="margin-left: 5px">
+                  {{ bookPost.offeredBook.genre.name }}
+                </span>
+              </vs-button>
+              <vs-button color="primary" icon>
+                <i class="bx bx-bookmark" />
+              </vs-button>
+            </template>
+          </vs-card>
         </div>
       </li>
     </ul>
@@ -81,7 +100,6 @@ export default {
 
 <style scoped>
 .list {
-  width: 75%;
   margin: 2% 0 0 22%;
   border-radius: 20px;
   border: 1px solid red;
@@ -91,7 +109,8 @@ export default {
 }
 
 img {
-  width: 100px;
+  height: 240px;
+  padding: 10px;
   object-fit: cover;
   border-radius: 10px;
 }

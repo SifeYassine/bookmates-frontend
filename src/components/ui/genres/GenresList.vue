@@ -1,10 +1,12 @@
 <template>
   <ul
-    class="list list-none p-0 px-[8vw] grid gap-5"
-    style="grid-template-columns: repeat(6, 1fr)"
+    class="list list-none p-0 px-[8vw] grid"
+    style="grid-template-columns: repeat(6, 1fr); row-gap: 10px"
   >
     <li v-for="genre in filteredGenres" :key="genre.id">
-      <h2>{{ genre.name }}</h2>
+      <div>
+        <h2>{{ genre.name }}</h2>
+      </div>
     </li>
   </ul>
 </template>
@@ -73,5 +75,19 @@ export default {
   z-index: 1000;
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+li {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #5208b6;
+  color: #5208b6;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
 }
 </style>
