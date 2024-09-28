@@ -80,7 +80,7 @@ export default createStore({
     async register({ commit }, credentials) {
       try {
         const { data } = await axios.post("/auth/register", credentials);
-        console.log("User registered successfully:", data.user.name);
+        console.log("User registered successmappedy:", data.user.name);
       } catch (error) {
         console.error(error);
       }
@@ -260,71 +260,32 @@ export default createStore({
     async fetchBookPosts({ commit, state }) {
       try {
         const { data } = await axios.get("book_posts/index");
-        const mappedBookPosts = data.bookPosts.map((bookPost) => {
-          const offeredBook = state.books.find(
-            (book) => book.id === bookPost.offeredBook_id
-          );
-          const wishedBook = state.books.find(
-            (book) => book.id === bookPost.wishedBook_id
-          );
 
-          if (offeredBook) {
-            offeredBook.genre = state.genres.find(
-              (genre) => genre.id === offeredBook.genre_id
-            );
-          }
-          if (wishedBook) {
-            wishedBook.genre = state.genres.find(
-              (genre) => genre.id === wishedBook.genre_id
-            );
-          }
-
-          return {
-            ...bookPost,
-            offeredBook,
-            wishedBook,
-          };
-        });
+        // Call mappingHandler to map book posts
+        const mappedBookPosts = mappingHandler(
+          data.bookPosts,
+          state.books,
+          state.genres
+        );
 
         commit("setBookPosts", mappedBookPosts);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch book posts:", error);
       }
     },
 
     async getBookPostById({ commit, state }, id) {
       try {
         const { data } = await axios.get(`book_posts/show/${id}`);
-        const bookPost = data.bookPost;
 
-        // Find the offered and wished books
-        const offeredBook = state.books.find(
-          (book) => book.id === bookPost.offeredBook_id
-        );
-        const wishedBook = state.books.find(
-          (book) => book.id === bookPost.wishedBook_id
-        );
+        // Call mappingHandler for a single book post
+        const mappedBookPost = mappingHandler(
+          data.bookPost,
+          state.books,
+          state.genres
+        )[0]; // For single book post
 
-        // Find the genres for offered and wished books
-        if (offeredBook) {
-          offeredBook.genre = state.genres.find(
-            (genre) => genre.id === offeredBook.genre_id
-          );
-        }
-        if (wishedBook) {
-          wishedBook.genre = state.genres.find(
-            (genre) => genre.id === wishedBook.genre_id
-          );
-        }
-
-        // Combine all information
-        const fullBookPost = {
-          ...bookPost,
-          offeredBook,
-          wishedBook,
-        };
-
-        commit("setBookPost", fullBookPost);
+        commit("setBookPost", mappedBookPost);
       } catch (error) {
         console.error("Failed to fetch book post details:", error);
       }
@@ -349,3 +310,35 @@ export default createStore({
     getBookPost: (state) => state.selectedBookPost,
   },
 });
+
+function mappingHandler(bookPosts, books, genres) {
+  // Ensure input is always an array
+  if (!Array.isArray(bookPosts)) {
+    bookPosts = [bookPosts];
+  }
+
+  return bookPosts.map((bookPost) => {
+    const offeredBook = books.find(
+      (book) => book.id === bookPost.offeredBook_id
+    );
+    const wishedBook = books.find((book) => book.id === bookPost.wishedBook_id);
+
+    if (offeredBook) {
+      offeredBook.genre = genres.find(
+        (genre) => genre.id === offeredBook.genre_id
+      );
+    }
+
+    if (wishedBook) {
+      wishedBook.genre = genres.find(
+        (genre) => genre.id === wishedBook.genre_id
+      );
+    }
+
+    return {
+      ...bookPost,
+      offeredBook,
+      wishedBook,
+    };
+  });
+}

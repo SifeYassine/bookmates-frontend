@@ -3,7 +3,11 @@
     class="list list-none p-0 px-[8vw] grid"
     style="grid-template-columns: repeat(6, 1fr); row-gap: 10px"
   >
-    <li v-for="genre in filteredGenres" :key="genre.id">
+    <li
+      v-for="genre in filteredGenres"
+      :key="genre.id"
+      @click="onGenreClick(genre)"
+    >
       <div>
         <h2>{{ genre.name }}</h2>
       </div>
@@ -14,6 +18,7 @@
 <script>
 import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import EditGenreModal from "./EditGenreModal.vue";
 
 export default {
@@ -22,22 +27,31 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
+
     const genres = computed(() => store.state.genres);
     const searchQuery = computed(() => store.state.searchQuery);
     const selectedGenre = ref(null);
     const showEditModal = ref(false);
 
     const filteredGenres = computed(() => {
-      if (!searchQuery.value) {
+      const searchFilter = searchQuery.value.toLowerCase();
+
+      if (!searchFilter) {
         return genres.value;
       }
+
       return genres.value.filter((genre) =>
-        genre.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+        genre.name.toLowerCase().includes(searchFilter)
       );
     });
 
     async function fetchGenres() {
       store.dispatch("fetchGenres");
+    }
+
+    function onGenreClick(genre) {
+      router.push({ path: "/book_posts", query: { genre: genre.name } });
     }
 
     async function editGenre(genre) {
@@ -57,6 +71,7 @@ export default {
 
     return {
       filteredGenres,
+      onGenreClick,
       deleteGenre,
       editGenre,
       showEditModal,

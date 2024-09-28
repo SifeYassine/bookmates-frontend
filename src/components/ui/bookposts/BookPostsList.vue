@@ -46,6 +46,7 @@
 import ShowBookPostDetailsModal from "./ShowBookPostDetailsModal.vue";
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
 export default {
   components: {
@@ -54,21 +55,29 @@ export default {
   setup() {
     const active = ref(false);
     const store = useStore();
+    const route = useRoute();
+
     const bookPosts = computed(() => store.getters.getBooks);
     const searchQuery = computed(() => store.state.searchQuery);
     const selectedBookPost = computed(() => store.getters.getBookPost);
+    const genreName = ref(route.query.genre || "");
 
     const baseURL = "http://127.0.0.1:8000";
 
     const filteredBookPosts = computed(() => {
-      if (!searchQuery.value) {
+      const searchFilter = searchQuery.value.toLowerCase();
+      const genreFilter = genreName.value.toLowerCase();
+
+      if (!searchFilter && !genreFilter) {
         return bookPosts.value;
       }
-      return bookPosts.value.filter((bookPost) =>
-        bookPost.offeredBook.title
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase())
-      );
+
+      return bookPosts.value.filter((bookPost) => {
+        return (
+          bookPost.offeredBook.title.toLowerCase().includes(searchFilter) &&
+          bookPost.offeredBook.genre.name.toLowerCase().includes(genreFilter)
+        );
+      });
     });
 
     async function fetchData() {
