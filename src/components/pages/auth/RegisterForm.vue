@@ -1,82 +1,120 @@
 <template>
-  <div class="flex flex-col items-center justify-center mt-[20vh] font-sans">
-    <h1 class="text-4xl text-gray-800 mb-6">Register</h1>
+  <div class="flex flex-col items-center justify-center mt-[8vh] font-sans">
     <form
-      @submit.prevent="getUserCoordinates"
-      class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
+      @submit.prevent="submitForm"
+      class="form bg-white p-5 pb-8 rounded-[20px] w-full max-w-md"
     >
-      <input
-        v-model="name"
-        type="text"
-        placeholder="name"
-        class="w-4/5 p-3 mb-4 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none text-base text-gray-800 bg-white"
-      />
-      <input
-        v-model="email"
-        type="text"
-        placeholder="email"
-        class="w-4/5 p-3 mb-4 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none text-base text-gray-800 bg-white"
-      />
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Password"
-        class="w-4/5 p-3 mb-4 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none text-base text-gray-800 bg-white"
-      />
-      <input v-model="latitude" type="text" hidden />
-      <input v-model="longitude" type="text" hidden />
-      <p class="mb-4">
-        Already have an account?
-        <router-link to="/login" class="text-blue-500">Login</router-link>
-      </p>
-      <button
-        type="submit"
-        class="w-3/5 p-3 bg-blue-500 text-white text-base rounded-full transition-colors duration-300 hover:bg-blue-700 shadow-md"
-      >
-        Register
-      </button>
+      <div class="logo flex flex-col items-center">
+        <img src="@/assets/logos/logo.png" class="w-[250px]" alt="Logo" />
+        <h1 class="text-3xl text-gray-700 font-[500] mb-6">Register</h1>
+        <p class="text-gray-700 text-base">
+          Welcom to BookMates, Start by creating an account
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <vs-input
+          v-model="userCredentials.name"
+          type="text"
+          color="#5208b6"
+          label="Name"
+          label-float
+          required
+          style="width: 326px"
+        >
+          <template #icon> # </template>
+        </vs-input>
+
+        <vs-input
+          v-model="userCredentials.email"
+          type="email"
+          color="#5208b6"
+          label="Email"
+          label-float
+          required
+          style="width: 326px"
+        >
+          <template #icon> @ </template>
+        </vs-input>
+
+        <vs-input
+          v-model="userCredentials.password"
+          :type="inputType"
+          color="#5208b6"
+          label="Password"
+          label-float
+          required
+          @click-icon="hasVisiblePassword = !hasVisiblePassword"
+          icon-after
+          style="width: 326px"
+        >
+          <template #icon>
+            <i v-if="!hasVisiblePassword" class="bx bx-show-alt" />
+            <i v-else class="bx bx-hide" />
+          </template>
+        </vs-input>
+
+        <p class="my-6 text-gray-800">
+          Already have an account?
+          <router-link to="/login" class="text-blue-500">Login</router-link>
+        </p>
+        <vs-button class="w-[90%]" color="#5208b6">
+          <h1 type="submit">Register</h1>
+        </vs-button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import axios from "@/api/axios";
 
 export default {
   setup() {
     const store = useStore();
     const router = useRouter();
-    const name = ref("");
-    const email = ref("");
-    const password = ref("");
-    const latitude = ref("");
-    const longitude = ref("");
-    const city = ref("");
-    const country = ref("");
+    const route = useRoute();
+
+    // User credentials including location info
+    const userCredentials = ref({
+      name: "",
+      email: "",
+      password: "",
+      latitude: "",
+      longitude: "",
+      city: "",
+      country: "",
+    });
+
+    const hasVisiblePassword = ref(false);
+    const inputType = computed(() =>
+      hasVisiblePassword.value ? "text" : "password"
+    );
 
     function getUserCoordinates() {
-      alert("We need your location to show you the nearest books");
+      alert("We need your location to show you the nearest books.");
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(success, error);
+      } else {
+        alert("Geolocation is not supported by your browser.");
       }
     }
 
     async function success(position) {
       try {
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
+        userCredentials.value.latitude = position.coords.latitude;
+        userCredentials.value.longitude = position.coords.longitude;
 
-        const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude.value}&longitude=${longitude.value}&localityLanguage=en`;
+        const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userCredentials.value.latitude}&longitude=${userCredentials.value.longitude}&localityLanguage=en`;
 
         const response = await axios.get(geoApiUrl);
         const data = response.data;
-        country.value = data.countryName;
-        city.value = data.city;
-
-        await register();
+        userCredentials.value.country = data.countryName;
+        userCredentials.value.city = data.city;
       } catch (error) {
         console.error("Error retrieving geolocation data:", error);
       }
@@ -103,34 +141,35 @@ export default {
       }
     }
 
-    async function register() {
+    async function submitForm() {
       try {
-        await store.dispatch("register", {
-          name: name.value,
-          email: email.value,
-          password: password.value,
-          latitude: latitude.value,
-          longitude: longitude.value,
-          city: city.value,
-          country: country.value,
-        });
+        await store.dispatch("register", userCredentials.value);
         router.push("/login");
       } catch (error) {
         console.error("Registration failed:", error.response.data);
+        alert("Registration failed. Please try again.");
       }
     }
 
+    onMounted(() => {
+      setTimeout(() => {
+        getUserCoordinates();
+      }, 300);
+    });
+
     return {
-      name,
-      email,
-      password,
-      latitude,
-      longitude,
-      city,
-      country,
-      register,
+      userCredentials,
+      submitForm,
       getUserCoordinates,
+      inputType,
+      hasVisiblePassword,
     };
   },
 };
 </script>
+
+<style scoped>
+.form {
+  box-shadow: 2px 4px 20px rgba(0, 0, 0, 0.2);
+}
+</style>

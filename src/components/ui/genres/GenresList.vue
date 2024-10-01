@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import EditGenreModal from "./EditGenreModal.vue";
@@ -29,10 +29,16 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    const genres = computed(() => store.state.genres);
+    const genres = computed(() => store.getters.getGenres);
     const searchQuery = computed(() => store.state.searchQuery);
-    const selectedGenre = ref(null);
-    const showEditModal = ref(false);
+
+    async function fetchGenres() {
+      try {
+        await store.dispatch("fetchGenres");
+      } catch (error) {
+        console.error("Failed to fetch genres:", error);
+      }
+    }
 
     const filteredGenres = computed(() => {
       const searchFilter = searchQuery.value.toLowerCase();
@@ -46,25 +52,8 @@ export default {
       );
     });
 
-    async function fetchGenres() {
-      store.dispatch("fetchGenres");
-    }
-
     function onGenreClick(genre) {
       router.push({ path: "/book_posts", query: { genre: genre.name } });
-    }
-
-    async function editGenre(genre) {
-      selectedGenre.value = genre;
-      showEditModal.value = true;
-    }
-
-    async function deleteGenre(id) {
-      try {
-        await store.dispatch("deleteGenre", id);
-      } catch (error) {
-        console.error("Failed to delete genre:", error);
-      }
     }
 
     onMounted(fetchGenres);
@@ -72,10 +61,6 @@ export default {
     return {
       filteredGenres,
       onGenreClick,
-      deleteGenre,
-      editGenre,
-      showEditModal,
-      selectedGenre,
     };
   },
 };

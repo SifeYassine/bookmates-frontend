@@ -30,6 +30,9 @@ export default createStore({
     addNewBookToState(state, newBook) {
       state.books.push(newBook);
     },
+    addNewBookPostToState(state, newBookPost) {
+      state.bookPosts.push(newBookPost);
+    },
     setBookPosts(state, bookPosts) {
       state.bookPosts = bookPosts;
     },
@@ -69,7 +72,7 @@ export default createStore({
     clearGenres(state) {
       state.genres = [];
     },
-    clearBooks() {
+    clearBooks(state) {
       state.books = [];
     },
     clearBookPosts(state) {
@@ -77,7 +80,7 @@ export default createStore({
     },
   },
   actions: {
-    async register({ commit }, credentials) {
+    async register(credentials) {
       try {
         const { data } = await axios.post("/auth/register", credentials);
         console.log("User registered successmappedy:", data.user.name);
@@ -294,8 +297,14 @@ export default createStore({
     async addBookPost({ commit, state }, bookPost) {
       try {
         const { data } = await axios.post("book_posts/create", bookPost);
+
+        const mappedBookPost = mappingHandler(
+          [data.bookPost],
+          state.books,
+          state.genres
+        )[0];
         // Update the state with the newly added bookPost
-        commit("setBookPosts", [...state.bookPosts, data.bookPost]);
+        commit("addNewBookPostToState", mappedBookPost);
       } catch (error) {
         console.error("Failed to add bookPost:", error);
       }
@@ -306,7 +315,9 @@ export default createStore({
     roleId: (state) => state.role_id,
     isAuthenticated: (state) => state.token,
     isAdmin: (state) => state.role_id === 1,
-    getBooks: (state) => state.bookPosts,
+    getGenres: (state) => state.genres,
+    getBooks: (state) => state.books,
+    getBookPosts: (state) => state.bookPosts,
     getBookPost: (state) => state.selectedBookPost,
   },
 });

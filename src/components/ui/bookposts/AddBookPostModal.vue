@@ -1,18 +1,22 @@
 <template>
   <div class="flex justify-center items-center">
-    <vs-button @click="active = !active" color="#5208b6"
-      >Create Book Post</vs-button
-    >
+    <vs-button @click="active = !active" color="#5208b6">
+      Create Book Post
+    </vs-button>
     <vs-dialog v-model="active" width="20vw">
       <template #header>
         <h3>Create Book Exchange Post</h3>
       </template>
 
-      <!-- Step 1: Input Offered Book -->
-      <div v-if="currentStep === 1" class="step">
-        <h4>Step 1: Offered Book Details</h4>
+      <!-- Multi Step Progressive Form -->
+      <div v-if="currentStep <= 2" class="step">
+        <h4>
+          Step {{ currentStep }}:
+          {{ currentStep === 1 ? "Offered" : "Wished" }} Book Details
+        </h4>
+
         <vs-input
-          v-model="offeredBook.title"
+          v-model="currentBook.title"
           label="Title"
           label-float
           required
@@ -20,7 +24,7 @@
           style="width: 350px"
         />
         <vs-input
-          v-model="offeredBook.author"
+          v-model="currentBook.author"
           label="Author"
           label-float
           required
@@ -28,178 +32,76 @@
           style="width: 350px"
         />
         <vs-input
-          v-model="offeredBook.description"
+          v-model="currentBook.description"
           label="Description"
           label-float
           required
           color="#5208b6"
           style="width: 350px"
         />
+
+        <!-- Image Upload -->
         <div class="flex" style="margin-top: 20px">
           <div
-            v-if="offeredBook.cover_image_preview"
+            v-if="currentBook.cover_image_preview"
             class="image-preview"
             style="margin-top: 10px"
           >
             <img
-              :src="offeredBook.cover_image_preview"
+              :src="currentBook.cover_image_preview"
               alt="Preview"
               class="preview-image"
             />
-            <button class="remove-button" @click="removeImage('offered')">
-              X
-            </button>
+            <button class="remove-button" @click="removeImage">X</button>
           </div>
           <div class="file-upload-wrapper">
             <input
               type="file"
-              ref="offeredFileInput"
+              ref="fileInput"
               class="hidden-input"
-              @change="onCoverImageChange($event, 'offered')"
+              @change="onCoverImageChange($event)"
               accept="image/*"
             />
-            <vs-button @click="triggerFileInput('offered')" color="#5208b6">
-              Choose File
-            </vs-button>
-            <span>{{
-              offeredBook.cover_image
-                ? offeredBook.cover_image.name
-                : "No File Chosen"
-            }}</span>
-          </div>
-        </div>
-
-        <vs-input
-          v-model="offeredBook.page_count"
-          type="number"
-          label="Page Count"
-          label-float
-          required
-          color="#5208b6"
-          style="width: 350px"
-        />
-        <vs-input
-          v-model="offeredBook.published_year"
-          type="number"
-          label="Published Year"
-          label-float
-          required
-          color="#5208b6"
-          style="width: 350px"
-        />
-        <vs-input
-          v-model="offeredBook.isbn"
-          label="ISBN"
-          label-float
-          required
-          color="#5208b6"
-          style="width: 350px"
-        />
-        <div class="center con-selects">
-          <vs-select
-            v-model="offeredBook.genre_id"
-            label="Genre"
-            label-float
-            required
-            color="#5208b6"
-          >
-            <vs-option
-              v-for="genre in genres"
-              :label="genre.name"
-              :key="genre.id"
-              :value="genre.id"
+            <vs-button @click="triggerFileInput" color="#5208b6"
+              >Choose File</vs-button
             >
-              {{ genre.name }}
-            </vs-option>
-          </vs-select>
-        </div>
-
-        <vs-button @click="handleOfferedBookNextStep" color="#5208b6"
-          >Next</vs-button
-        >
-      </div>
-
-      <!-- Step 2: Input Wished Book -->
-      <div v-if="currentStep === 2" class="step">
-        <h4>Step 2: Wished Book Details</h4>
-        <vs-input
-          v-model="wishedBook.title"
-          label="Title"
-          label-float
-          required
-          color="#5208b6"
-        />
-        <vs-input
-          v-model="wishedBook.author"
-          label="Author"
-          label-float
-          required
-          color="#5208b6"
-        />
-        <vs-input
-          v-model="wishedBook.description"
-          label="Description"
-          label-float
-          required
-          color="#5208b6"
-        />
-
-        <div class="flex" style="margin-top: 20px">
-          <div v-if="wishedBook.cover_image_preview" class="image-preview">
-            <img
-              :src="wishedBook.cover_image_preview"
-              alt="Preview"
-              class="preview-image"
-            />
-            <button class="remove-button" @click="removeImage('wished')">
-              X
-            </button>
-          </div>
-          <div class="file-upload-wrapper">
-            <input
-              type="file"
-              ref="wishedFileInput"
-              class="hidden-input"
-              @change="onCoverImageChange($event, 'wished')"
-              accept="image/*"
-            />
-            <vs-button @click="triggerFileInput('wished')" color="#5208b6">
-              Choose File
-            </vs-button>
             <span>{{
-              wishedBook.cover_image
-                ? wishedBook.cover_image.name
+              currentBook.cover_image
+                ? currentBook.cover_image.name
                 : "No File Chosen"
             }}</span>
           </div>
         </div>
 
         <vs-input
-          v-model="wishedBook.page_count"
+          v-model="currentBook.page_count"
           type="number"
           label="Page Count"
           label-float
           required
           color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
-          v-model="wishedBook.published_year"
+          v-model="currentBook.published_year"
           type="number"
           label="Published Year"
           label-float
           required
           color="#5208b6"
+          style="width: 350px"
         />
         <vs-input
-          v-model="wishedBook.isbn"
+          v-model="currentBook.isbn"
           label="ISBN"
           label-float
           required
           color="#5208b6"
+          style="width: 350px"
         />
         <div class="center con-selects">
           <vs-select
-            v-model="wishedBook.genre_id"
+            v-model="currentBook.genre_id"
             label="Genre"
             label-float
             required
@@ -217,12 +119,15 @@
         </div>
 
         <div class="flex gap-10 justify-center">
-          <vs-button @click="goToPreviousStep" color="#5208b6">
-            Previous
-          </vs-button>
-          <vs-button @click="handleWishedBookNextStep" color="#5208b6">
-            Next
-          </vs-button>
+          <vs-button
+            v-if="currentStep > 1"
+            @click="goToPreviousStep"
+            color="#5208b6"
+            >Previous</vs-button
+          >
+          <vs-button @click="submitCurrentBookAndNextStep" color="#5208b6"
+            >Next</vs-button
+          >
         </div>
       </div>
 
@@ -273,19 +178,17 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const active = ref(false);
     const currentStep = ref(1);
-    const offeredFileInput = ref(null);
-    const wishedFileInput = ref(null);
     const store = useStore();
-    const genres = computed(() => store.state.genres);
+    const genres = computed(() => store.getters.getGenres);
+    const books = computed(() => store.getters.getBooks);
     const userId = computed(() => store.getters.userId);
-    const books = computed(() => store.state.books);
 
     const offeredBook = ref({
       title: "",
@@ -298,6 +201,7 @@ export default {
       genre_id: null,
       user_id: null,
     });
+
     const wishedBook = ref({
       title: "",
       author: "",
@@ -310,31 +214,16 @@ export default {
       user_id: null,
     });
 
+    const currentBook = computed(() => {
+      return currentStep.value === 1 ? offeredBook.value : wishedBook.value;
+    });
+
     const selectedOfferedBook = ref(null);
     const selectedWishedBook = ref(null);
 
-    async function fetchGenres() {
-      await store.dispatch("fetchGenres");
-    }
-
-    async function fetchBooks() {
-      await store.dispatch("fetchBooks");
-    }
-
-    async function fetchData() {
-      await fetchGenres();
-      await fetchBooks();
-    }
-
-    async function submitOfferedBook() {
-      offeredBook.value.user_id = userId.value;
-      await store.dispatch("addBook", offeredBook.value);
-      return books.value;
-    }
-
-    async function submitWishedBook() {
-      wishedBook.value.user_id = userId.value;
-      await store.dispatch("addBook", wishedBook.value);
+    async function submitCurrentBook(currentBook) {
+      currentBook.value.user_id = userId.value;
+      await store.dispatch("addBook", currentBook.value);
       return books.value;
     }
 
@@ -346,55 +235,33 @@ export default {
       currentStep.value--;
     }
 
-    function closeModal() {
-      active.value = false;
-    }
-
-    async function handleOfferedBookNextStep() {
-      await submitOfferedBook();
-      console.log("book list next", books.value);
+    async function submitCurrentBookAndNextStep() {
+      await submitCurrentBook(currentBook);
       goToNextStep();
     }
 
-    async function handleWishedBookNextStep() {
-      await submitWishedBook();
-      console.log("book list next", books.value);
-      goToNextStep();
-    }
-
-    function onCoverImageChange(event, type) {
+    function onCoverImageChange(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
 
       reader.onload = (event) => {
-        if (type === "offered") {
-          offeredBook.value.cover_image = file;
-          offeredBook.value.cover_image_preview = event.target.result;
-        } else {
-          wishedBook.value.cover_image = file;
-          wishedBook.value.cover_image_preview = event.target.result;
-        }
+        currentBook.value.cover_image = file;
+        currentBook.value.cover_image_preview = event.target.result;
       };
 
       reader.readAsDataURL(file);
     }
 
-    function triggerFileInput(type) {
-      if (type === "offered") {
-        offeredFileInput.value.click();
-      } else if (type === "wished") {
-        wishedFileInput.value.click();
+    function triggerFileInput() {
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput) {
+        fileInput.click();
       }
     }
 
-    function removeImage(type) {
-      if (type === "offered") {
-        offeredBook.value.cover_image = null;
-        offeredBook.value.cover_image_preview = null;
-      } else {
-        wishedBook.value.cover_image = null;
-        wishedBook.value.cover_image_preview = null;
-      }
+    function removeImage() {
+      currentBook.value.cover_image = null;
+      currentBook.value.cover_image_preview = null;
     }
 
     async function submitForm() {
@@ -404,39 +271,28 @@ export default {
           wishedBook_id: selectedWishedBook.value,
           offerer_id: userId.value,
         });
-        closeModal();
+        active.value = false;
       } catch (error) {
         console.error("Failed to submit book post:", error);
       }
     }
 
-    async function loggedUser() {
-      await store.dispatch("loggedUser");
-    }
-
-    onMounted(fetchData);
-    onMounted(loggedUser);
-
     return {
       active,
       currentStep,
-      offeredFileInput,
-      wishedFileInput,
       genres,
-      userId,
       books,
-      offeredBook,
-      wishedBook,
-      selectedOfferedBook,
-      selectedWishedBook,
+      currentBook,
+      submitCurrentBook,
+      submitCurrentBookAndNextStep,
+      goToNextStep,
       goToPreviousStep,
-      closeModal,
-      handleOfferedBookNextStep,
-      handleWishedBookNextStep,
       onCoverImageChange,
       triggerFileInput,
       removeImage,
       submitForm,
+      selectedOfferedBook,
+      selectedWishedBook,
     };
   },
 };

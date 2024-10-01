@@ -34,18 +34,11 @@ router.beforeEach((to, from, next) => {
   const protectedPages = !publicPages.includes(to.path);
 
   const isAuthenticated = store.getters.isAuthenticated;
-  // const isAdmin = store.getters.isAdmin;
 
   // If the route requires authentication and user is not authenticated, redirect to /register
   if (protectedPages && !isAuthenticated) {
     return next("/register");
   }
-
-  // If the user is not an admin and tries to access restricted routes, redirect to "Not Found" page
-  // if (protectedPages && isAuthenticated && !isAdmin) {
-  //   return next({ name: "NotFound" });
-  // }
-
   // Otherwise, proceed to the route
   next();
 });

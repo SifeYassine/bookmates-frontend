@@ -7,8 +7,8 @@
     <vs-navbar-item id="guide" :active="active === 'guide'">
       <a href="#guide">How it works</a>
     </vs-navbar-item>
-    <vs-navbar-item id="about" :active="active === 'about'">
-      About Us
+    <vs-navbar-item id="features" :active="active === 'features'">
+      <a href="#features">Features</a>
     </vs-navbar-item>
 
     <!-- login, register and logout buttons -->

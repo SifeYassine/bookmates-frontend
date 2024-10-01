@@ -26,7 +26,10 @@
     </section>
 
     <h1 class="text-5xl text-gray-900 font-bold mb-6">Core Features</h1>
-    <section class="w-[70%] mx-auto rounded-2xl p-5 grid gap-10 lg:grid-cols-3">
+    <section
+      id="features"
+      class="w-[70%] mx-auto rounded-2xl p-5 grid gap-10 lg:grid-cols-3"
+    >
       <article class="flex flex-col gap-3 items-center">
         <img
           src="@/assets/images/hero.png"
@@ -66,8 +69,6 @@
         </p>
       </article>
     </section>
-
-    <!-- How it works -->
 
     <h1 class="text-5xl text-gray-900 font-bold mt-5 mb-6">How it works?</h1>
     <section

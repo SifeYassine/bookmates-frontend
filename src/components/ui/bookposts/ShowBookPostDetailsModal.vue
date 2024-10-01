@@ -11,8 +11,11 @@
           class="book-cover"
         />
         <div class="book-details">
-          <h3>{{ bookPost.offeredBook.title }}</h3>
+          <p><strong>Title:</strong> {{ bookPost.offeredBook.title }}</p>
           <p><strong>Author:</strong> {{ bookPost.offeredBook.author }}</p>
+          <p>
+            <strong>Description:</strong> {{ bookPost.offeredBook.description }}
+          </p>
           <p>
             <strong>Genre:</strong>
             {{
@@ -21,13 +24,15 @@
                 : "N/A"
             }}
           </p>
-          <p>
-            <strong>Description:</strong> {{ bookPost.offeredBook.description }}
-          </p>
         </div>
       </div>
       <div v-if="bookPost.wishedBook" class="wished-book">
         <h4>Wished Book</h4>
+        <img
+          :src="`${baseURL}${bookPost.wishedBook.cover_image}`"
+          alt="Book cover"
+          class="book-cover2"
+        />
         <p><strong>Title:</strong> {{ bookPost.wishedBook.title }}</p>
         <p><strong>Author:</strong> {{ bookPost.wishedBook.author }}</p>
         <p>
@@ -86,6 +91,15 @@ export default {
   height: auto;
   object-fit: cover;
   margin-right: 20px;
+  border-radius: 20px;
+}
+
+.book-cover2 {
+  width: 80px;
+  height: auto;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 10px;
 }
 
 .book-details {

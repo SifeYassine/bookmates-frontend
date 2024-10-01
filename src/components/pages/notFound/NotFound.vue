@@ -1,8 +1,12 @@
 <template>
-  <div class="not-found">
-    <h1>404</h1>
-    <p>Oops! The page you're looking for doesn't exist.</p>
-    <router-link to="/">Go back to Home</router-link>
+  <div class="flex flex-col items-center justify-center h-screen text-center">
+    <h1 class="text-[10rem] text-red-500 font-bold m-0">404</h1>
+    <p class="text-xl mt-4 mb-6">
+      Oops! The page you're looking for doesn't exist.
+    </p>
+    <router-link to="/" class="text-lg text-blue-500 hover:underline"
+      >Go back to Home</router-link
+    >
   </div>
 </template>
 
@@ -11,35 +15,3 @@ export default {
   name: "NotFound",
 };
 </script>
-
-<style scoped>
-.not-found {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-}
-
-h1 {
-  font-size: 10rem;
-  margin: 0;
-  color: #ff6b6b;
-}
-
-p {
-  font-size: 1.5rem;
-  margin: 1rem 0;
-}
-
-a {
-  font-size: 1.25rem;
-  color: #3498db;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-</style>

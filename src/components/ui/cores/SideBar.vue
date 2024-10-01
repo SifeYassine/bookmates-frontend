@@ -13,7 +13,7 @@
         </template>
         Book Posts
       </vs-sidebar-item>
-      <vs-sidebar-item v-if="isAdmin" id="genres" to="/genres">
+      <vs-sidebar-item id="genres" to="/genres">
         <template #icon>
           <i class="bx bx-tag" />
         </template>
@@ -24,16 +24,13 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 
 export default {
   setup() {
     const active = ref("book_posts");
-    const store = useStore();
     const route = useRoute();
-    const isAdmin = computed(() => store.getters.isAdmin);
 
     const path = route.path;
     if (path) {
@@ -42,7 +39,6 @@ export default {
 
     return {
       active,
-      isAdmin,
     };
   },
 };

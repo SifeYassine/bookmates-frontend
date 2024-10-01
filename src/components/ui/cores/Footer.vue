@@ -29,13 +29,6 @@
           </a>
           <a href="#">
             <img
-              src="https://img.icons8.com/?size=512&id=63676&format=png"
-              alt="pinterest"
-              class="h-8"
-            />
-          </a>
-          <a href="#">
-            <img
               src="https://img.icons8.com/?size=512&id=Xy10Jcu1L2Su&format=png"
               alt="instagram"
               class="h-8"
