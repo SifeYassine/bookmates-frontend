@@ -21,7 +21,7 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
         <vs-input
           v-model="currentBook.author"
@@ -29,7 +29,7 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
         <vs-input
           v-model="currentBook.description"
@@ -37,35 +37,41 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
 
         <!-- Image Upload -->
-        <div class="flex" style="margin-top: 20px">
+        <div class="flex mt-5">
           <div
             v-if="currentBook.cover_image_preview"
-            class="image-preview"
-            style="margin-top: 10px"
+            class="relative inline-block mr-4 mt-2.5"
           >
             <img
               :src="currentBook.cover_image_preview"
               alt="Preview"
-              class="preview-image"
+              class="max-w-[100px] max-h-[100px] object-cover rounded-lg"
             />
-            <button class="remove-button" @click="removeImage">X</button>
+            <button
+              class="absolute -top-1 -right-1 bg-red-500 hover:bg-red-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cursor-pointer"
+              @click="removeImage"
+            >
+              X
+            </button>
           </div>
-          <div class="file-upload-wrapper">
+          <div
+            class="my-4 px-2.5 py-4 w-fit flex items-center bg-gray-100 rounded-lg border-2 border-gray-200"
+          >
             <input
               type="file"
               ref="fileInput"
-              class="hidden-input"
+              class="hidden"
               @change="onCoverImageChange($event)"
               accept="image/*"
             />
             <vs-button @click="triggerFileInput" color="#5208b6"
               >Choose File</vs-button
             >
-            <span>{{
+            <span class="mx-2">{{
               currentBook.cover_image
                 ? currentBook.cover_image.name
                 : "No File Chosen"
@@ -80,7 +86,7 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
         <vs-input
           v-model="currentBook.published_year"
@@ -89,7 +95,7 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
         <vs-input
           v-model="currentBook.isbn"
@@ -97,7 +103,7 @@
           label-float
           required
           color="#5208b6"
-          style="width: 350px"
+          class="w-[350px]"
         />
         <div class="center con-selects">
           <vs-select
@@ -170,7 +176,7 @@
           <vs-button @click="goToPreviousStep" color="#5208b6">
             Previous
           </vs-button>
-          <vs-button @click="submitForm" color="#5208b6"> Submit </vs-button>
+          <vs-button @click="submitForm" color="#5208b6">Submit</vs-button>
         </div>
       </div>
     </vs-dialog>
@@ -271,6 +277,7 @@ export default {
           wishedBook_id: selectedWishedBook.value,
           offerer_id: userId.value,
         });
+        await store.dispatch("fetchBookPosts");
         active.value = false;
       } catch (error) {
         console.error("Failed to submit book post:", error);
@@ -297,58 +304,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.file-upload-wrapper {
-  margin: 1rem 0;
-  padding: 1rem 10px;
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  background-color: #f4f7f8;
-  border-radius: 10px;
-  border: 2px solid #e2e4e5;
-}
-
-.hidden-input {
-  display: none;
-}
-
-.image-preview {
-  position: relative;
-  display: inline-block;
-  margin-right: 1rem;
-}
-
-.preview-image {
-  max-width: 100px;
-  max-height: 100px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.remove-button {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-.remove-button:hover {
-  background-color: darkred;
-}
-
-span {
-  margin: 0 0.5rem;
-}
-</style>

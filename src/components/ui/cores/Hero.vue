@@ -30,7 +30,9 @@
       id="features"
       class="w-[70%] mx-auto rounded-2xl p-5 grid gap-10 lg:grid-cols-3"
     >
-      <article class="flex flex-col gap-3 items-center">
+      <article
+        class="flex flex-col gap-3 items-center p-[20px] rounded-[20px] z-[1000] bg-[white]"
+      >
         <img
           src="@/assets/images/hero.png"
           alt=""
@@ -42,7 +44,9 @@
           molestias corrupti debitis, esse.
         </p>
       </article>
-      <article class="flex flex-col gap-3 items-center">
+      <article
+        class="flex flex-col gap-3 items-center p-[20px] rounded-[20px] z-[1000] bg-[white]"
+      >
         <img
           src="@/assets/images/hero.png"
           alt=""
@@ -54,7 +58,9 @@
           molestias corrupti debitis, esse.
         </p>
       </article>
-      <article class="flex flex-col gap-3 items-center">
+      <article
+        class="flex flex-col gap-3 items-center p-[20px] rounded-[20px] z-[1000] bg-[white]"
+      >
         <img
           src="@/assets/images/hero.png"
           alt=""
@@ -84,7 +90,7 @@
           />
         </div>
         <div class="flex flex-col gap-5">
-          <article>
+          <article class="p-[20px] rounded-[20px] z-[1000] bg-[white]">
             <h1 class="text-xl text-gray-900 mb-3">
               1. Create The Book You Offering
             </h1>
@@ -93,7 +99,7 @@
               molestias corrupti debitis.
             </p>
           </article>
-          <article>
+          <article class="p-[20px] rounded-[20px] z-[1000] bg-[white]">
             <h1 class="text-xl text-gray-900 mb-3">
               2. Create The Book You Wish to Receive
             </h1>
@@ -106,14 +112,14 @@
       </div>
       <div class="w-[90%] flex gap-5 items-center right text-left py-0">
         <div class="flex flex-col gap-5">
-          <article>
+          <article class="p-[20px] rounded-[20px] z-[1000] bg-[white]">
             <h1 class="text-xl text-gray-900 mb-3">3. Submit Your Book Post</h1>
             <p class="text-gray-700">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
               molestias corrupti debitis.
             </p>
           </article>
-          <article>
+          <article class="p-[20px] rounded-[20px] z-[1000] bg-[white]">
             <h1 class="text-xl text-gray-900 mb-3">
               4. Wait for Other Users' Exchange Requests
             </h1>
@@ -143,10 +149,6 @@ export default {
 
 <style scoped>
 article {
-  padding: 20px;
-  border-radius: 20px;
-  z-index: 1000;
-  background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 </style>

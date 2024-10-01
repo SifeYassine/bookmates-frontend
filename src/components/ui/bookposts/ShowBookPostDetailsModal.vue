@@ -1,16 +1,16 @@
 <template>
   <vs-dialog width="550px" not-center>
     <template #header>
-      <h2 class="dialog-title">Book Post Details</h2>
+      <h2 class="text-2xl text-gray-800">Book Post Details</h2>
     </template>
-    <div v-if="bookPost && bookPost.offeredBook" class="dialog-content">
-      <div class="book-info">
+    <div v-if="bookPost && bookPost.offeredBook" class="p-5">
+      <div class="flex mb-5">
         <img
           :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
           alt="Book cover"
-          class="book-cover"
+          class="w-[120px] h-auto object-cover mr-5 rounded-2xl"
         />
-        <div class="book-details">
+        <div class="flex-1">
           <p><strong>Title:</strong> {{ bookPost.offeredBook.title }}</p>
           <p><strong>Author:</strong> {{ bookPost.offeredBook.author }}</p>
           <p>
@@ -26,12 +26,12 @@
           </p>
         </div>
       </div>
-      <div v-if="bookPost.wishedBook" class="wished-book">
-        <h4>Wished Book</h4>
+      <div v-if="bookPost.wishedBook" class="border-t border-gray-200 pt-5">
+        <h4 class="text-gray-800 mt-0">Wished Book</h4>
         <img
           :src="`${baseURL}${bookPost.wishedBook.cover_image}`"
           alt="Book cover"
-          class="book-cover2"
+          class="w-20 h-auto object-cover mr-5 rounded-lg"
         />
         <p><strong>Title:</strong> {{ bookPost.wishedBook.title }}</p>
         <p><strong>Author:</strong> {{ bookPost.wishedBook.author }}</p>
@@ -70,54 +70,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.dialog-title {
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.dialog-content {
-  padding: 20px;
-}
-
-.book-info {
-  display: flex;
-  margin-bottom: 20px;
-}
-
-.book-cover {
-  width: 120px;
-  height: auto;
-  object-fit: cover;
-  margin-right: 20px;
-  border-radius: 20px;
-}
-
-.book-cover2 {
-  width: 80px;
-  height: auto;
-  object-fit: cover;
-  margin-right: 20px;
-  border-radius: 10px;
-}
-
-.book-details {
-  flex: 1;
-}
-
-.book-details h3 {
-  margin-top: 0;
-  color: #333;
-}
-
-.wished-book {
-  border-top: 1px solid #eee;
-  padding-top: 20px;
-}
-
-.wished-book h4 {
-  margin-top: 0;
-  color: #333;
-}
-</style>

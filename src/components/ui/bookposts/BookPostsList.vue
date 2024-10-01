@@ -2,7 +2,7 @@
   <div>
     <ShowBookPostDetailsModal v-model="active" :bookPost="selectedBookPost" />
     <ul
-      class="list list-none grid gap-4"
+      class="list-none grid gap-4 px-[60px] py-[20px] ml-[18.5%] rounded-3xl z-[1000]"
       style="grid-template-columns: repeat(5, 1fr)"
     >
       <li v-for="bookPost in filteredBookPosts" :key="bookPost.id">
@@ -20,6 +20,7 @@
             <template #img>
               <img
                 :src="`${baseURL}${bookPost.offeredBook.cover_image}`"
+                class="h-[240px] object-fill p-[20px]"
                 alt="Book cover"
               />
             </template>
@@ -118,17 +119,7 @@ export default {
 </script>
 
 <style scoped>
-.list {
-  padding: 20px 60px;
-  margin-left: 18.5%;
-  border-radius: 20px;
-  z-index: 1000;
-}
-
 img {
-  height: 240px;
-  padding: 20px;
-  object-fit: fill;
   border-radius: 30px !important;
 }
 </style>

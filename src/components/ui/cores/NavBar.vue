@@ -52,8 +52,4 @@ export default {
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
-#avatar {
-  opacity: 1;
-}
 </style>

@@ -2,7 +2,7 @@
   <div>
     <SideBar />
     <NavBar />
-    <AddBookPostModal class="add-genre-modal" />
+    <AddBookPostModal class="mt-[10%]" />
     <BookPostsList />
   </div>
 </template>
@@ -23,9 +23,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.add-genre-modal {
-  margin-top: 10%;
-}
-</style>

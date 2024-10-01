@@ -1,12 +1,12 @@
 <template>
   <ul
-    class="list list-none p-0 px-[8vw] grid"
-    style="grid-template-columns: repeat(6, 1fr); row-gap: 10px"
+    class="w-3/4 ml-[22%] mt-[2%] rounded-2xl border border-red-500 z-[1000] bg-white shadow-md grid grid-cols-6 gap-y-2.5 list-none p-0 px-[8vw]"
   >
     <li
       v-for="genre in filteredGenres"
       :key="genre.id"
       @click="onGenreClick(genre)"
+      class="w-[90%] flex justify-center items-center border-2 border-[#5208b6] text-[#5208b6] text-xl font-bold rounded-lg p-1.5 cursor-pointer"
     >
       <div>
         <h2>{{ genre.name }}</h2>
@@ -65,29 +65,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.list {
-  width: 75%;
-  margin: 2% 0 0 22%;
-  border-radius: 20px;
-  border: 1px solid red;
-  z-index: 1000;
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-li {
-  width: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #5208b6;
-  color: #5208b6;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 5px;
-  cursor: pointer;
-}
-</style>

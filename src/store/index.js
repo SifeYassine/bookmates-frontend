@@ -3,8 +3,6 @@ import axios from "@/api/axios";
 
 export default createStore({
   state: {
-    users: [],
-    roles: [],
     user_id: null,
     role_id: null,
     genres: [],
@@ -15,29 +13,17 @@ export default createStore({
     searchQuery: "",
   },
   mutations: {
-    setUsers(state, users) {
-      state.users = users;
-    },
-    setRoles(state, roles) {
-      state.roles = roles;
-    },
     setGenres(state, genres) {
       state.genres = genres;
     },
     setBooks(state, books) {
       state.books = books;
     },
-    addNewBookToState(state, newBook) {
-      state.books.push(newBook);
-    },
-    addNewBookPostToState(state, newBookPost) {
-      state.bookPosts.push(newBookPost);
-    },
     setBookPosts(state, bookPosts) {
       state.bookPosts = bookPosts;
     },
-    setBookPost(state, bookPost) {
-      state.selectedBookPost = bookPost;
+    setSelectedBookPostToState(state, mappedSelectedBookPost) {
+      state.selectedBookPost = mappedSelectedBookPost;
     },
     setTokenIds(state, { token, user_id, role_id }) {
       state.token = token;
@@ -62,12 +48,6 @@ export default createStore({
     clearUserIds(state) {
       state.user_id = null;
       state.role_id = null;
-    },
-    clearUsers(state) {
-      state.users = [];
-    },
-    clearRoles(state) {
-      state.roles = [];
     },
     clearGenres(state) {
       state.genres = [];
@@ -119,60 +99,12 @@ export default createStore({
       commit("clearTokenIds");
       commit("clearUserIds");
       commit("clearGenres");
-      commit("clearUsers");
-      commit("clearRoles");
       commit("clearBooks");
       commit("clearBookPosts");
     },
 
     searchQuery({ commit }, query) {
       commit("setSearchQuery", query);
-    },
-
-    // Users CRUD
-    async fetchUsers({ commit }) {
-      try {
-        const { data } = await axios.get("/users/index");
-        commit("setUsers", data.users);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    async updateUser({ commit, state }, user) {
-      try {
-        const { data } = await axios.put(`/users/update/${user.id}`, user);
-        // Update the state with the updated user
-        commit(
-          "setUsers",
-          state.users.map((usr) => (usr.id === user.id ? data.user : usr))
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    async deleteUser({ commit, state }, userId) {
-      try {
-        await axios.delete(`/users/delete/${userId}`);
-        // Remove the deleted user from the state
-        commit(
-          "setUsers",
-          state.users.filter((user) => user.id !== userId)
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    // Roles CRUD
-    async fetchRoles({ commit }) {
-      try {
-        const { data } = await axios.get("/roles/index");
-        commit("setRoles", data.roles);
-      } catch (error) {
-        console.error(error);
-      }
     },
 
     // Genres CRUD
@@ -195,30 +127,6 @@ export default createStore({
       }
     },
 
-    async updateGenre({ commit, state }, genre) {
-      try {
-        const { data } = await axios.put(`/genres/update/${genre.id}`, genre);
-        // Update the state with the updated genre
-        const updatedgenre = state.genres.map((gnr) =>
-          gnr.id === data.genre.id ? data.genre : gnr
-        );
-        commit("setGenres", updatedgenre);
-      } catch (error) {
-        console.error("Failed to update genre:", error);
-      }
-    },
-
-    async deleteGenre({ commit, state }, id) {
-      try {
-        await axios.delete(`/genres/delete/${id}`);
-        // Update the state after successful deletion
-        const updatedGenres = state.genres.filter((genre) => genre.id !== id);
-        commit("setGenres", updatedGenres);
-      } catch (error) {
-        console.error("Failed to delete genre:", error);
-      }
-    },
-
     // Books CRUD
     async fetchBooks({ commit }) {
       try {
@@ -233,7 +141,7 @@ export default createStore({
       try {
         // Create a FormData object
         const formData = new FormData();
-        let newBook;
+        let mappedBook;
 
         //Loop through the book object to append all fields to FormData
         Object.entries(book).forEach(([key, value]) => {
@@ -243,17 +151,12 @@ export default createStore({
         });
 
         //Make the API request with the FormData object
-        const { data } = await axios.post("books/create", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${state.token}`,
-          },
-        });
+        const { data } = await axios.post("books/create", formData);
 
-        newBook = data.Book;
+        mappedBook = data.Book;
 
         // Commit the newly added book to the state
-        commit("addNewBookToState", newBook);
+        commit("setBooks", [...state.books, mappedBook]);
       } catch (error) {
         console.error("Failed to add book:", error);
       }
@@ -282,13 +185,13 @@ export default createStore({
         const { data } = await axios.get(`book_posts/show/${id}`);
 
         // Call mappingHandler for a single book post
-        const mappedBookPost = mappingHandler(
+        const mappedSelectedBookPost = mappingHandler(
           data.bookPost,
           state.books,
           state.genres
         )[0]; // For single book post
 
-        commit("setBookPost", mappedBookPost);
+        commit("setSelectedBookPostToState", mappedSelectedBookPost);
       } catch (error) {
         console.error("Failed to fetch book post details:", error);
       }
@@ -303,8 +206,9 @@ export default createStore({
           state.books,
           state.genres
         )[0];
+
         // Update the state with the newly added bookPost
-        commit("addNewBookPostToState", mappedBookPost);
+        commit("setBookPosts", [...state.bookPosts, mappedBookPost]);
       } catch (error) {
         console.error("Failed to add bookPost:", error);
       }

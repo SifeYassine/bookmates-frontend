@@ -1,6 +1,6 @@
 <template>
   <vs-sidebar v-model="active" absolute open class="sidebar" color="#5208b6">
-    <div class="items">
+    <div class="mt-[20px]">
       <vs-sidebar-item id="home" to="/">
         <template #icon>
           <i class="bx bx-home-alt-2" />
@@ -53,9 +53,5 @@ export default {
   z-index: 1000;
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.items {
-  margin-top: 20px;
 }
 </style>
