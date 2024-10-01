@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center ml-[12%]">
-    <vs-button @click="active = !active" color="#5208b6">
+    <vs-button v-if="isAdmin" @click="active = !active" color="#5208b6">
       Create Genre
     </vs-button>
     <vs-dialog v-model="active" width="20vw">
@@ -10,6 +10,7 @@
 
       <div class="flex flex-col gap-5 items-center">
         <vs-input
+          v-if="isAdmin"
           v-model="newGenre.name"
           @keyup.enter="submitForm()"
           type="text"
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -39,6 +40,7 @@ export default {
     const active = ref(false);
     const newGenre = ref({ name: "" });
     const store = useStore();
+    const isAdmin = computed(() => store.getters.isAdmin);
 
     async function submitForm() {
       try {
@@ -54,7 +56,7 @@ export default {
       active.value = false;
     }
 
-    return { active, newGenre, submitForm, closeModal };
+    return { active, newGenre, submitForm, closeModal, isAdmin };
   },
 };
 </script>
