@@ -1,15 +1,18 @@
 <template>
   <ul
-    class="w-3/4 ml-[22%] mt-[2%] rounded-2xl border border-red-500 z-[1000] bg-white shadow-md grid grid-cols-6 gap-y-2.5 list-none p-0 px-[8vw]"
+    class="GenresList w-3/4 ml-[22%] mt-[2%] rounded-2xl z-[1000] bg-white grid grid-cols-6 gap-y-2.5 list-none p-[50px]"
   >
     <li
       v-for="genre in filteredGenres"
       :key="genre.id"
       @click="onGenreClick(genre)"
-      class="w-[90%] flex justify-center items-center border-2 border-[#5208b6] text-[#5208b6] text-xl font-bold rounded-lg p-1.5 cursor-pointer"
+      class="font-bold p-1.5"
     >
       <div>
-        <h2>{{ genre.name }}</h2>
+        <vs-button class="w-[85%]" color="#5208b6">
+          <i class="bx bx-tag text-[15px]" />
+          <p class="text-[15px] ml-[5px]">{{ genre.name }}</p></vs-button
+        >
       </div>
     </li>
   </ul>
@@ -19,12 +22,8 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import EditGenreModal from "./EditGenreModal.vue";
 
 export default {
-  components: {
-    EditGenreModal,
-  },
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -65,3 +64,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.GenresList {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+</style>

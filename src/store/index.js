@@ -60,10 +60,9 @@ export default createStore({
     },
   },
   actions: {
-    async register(credentials) {
+    async register({ commit }, credentials) {
       try {
         const { data } = await axios.post("/auth/register", credentials);
-        console.log("User registered successmappedy:", data.user.name);
       } catch (error) {
         console.error(error);
       }

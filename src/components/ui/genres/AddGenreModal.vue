@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center ml-[12%]">
     <vs-button @click="active = !active" color="#5208b6">
       Create Genre
     </vs-button>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center ml-[16%] mb-[20px]">
     <vs-button @click="active = !active" color="#5208b6">
       Create Book Post
     </vs-button>
@@ -196,29 +196,21 @@ export default {
     const books = computed(() => store.getters.getBooks);
     const userId = computed(() => store.getters.userId);
 
-    const offeredBook = ref({
+    const bookInfo = {
       title: "",
       author: "",
       description: "",
       cover_image: null,
+      cover_image_preview: null,
       page_count: null,
       published_year: null,
       isbn: null,
       genre_id: null,
       user_id: null,
-    });
+    };
 
-    const wishedBook = ref({
-      title: "",
-      author: "",
-      description: "",
-      cover_image: null,
-      page_count: null,
-      published_year: null,
-      isbn: null,
-      genre_id: null,
-      user_id: null,
-    });
+    const offeredBook = ref({ ...bookInfo });
+    const wishedBook = ref({ ...bookInfo });
 
     const currentBook = computed(() => {
       return currentStep.value === 1 ? offeredBook.value : wishedBook.value;
@@ -270,6 +262,16 @@ export default {
       currentBook.value.cover_image_preview = null;
     }
 
+    function resetForm() {
+      offeredBook.value = { ...bookInfo };
+      wishedBook.value = { ...bookInfo };
+
+      selectedOfferedBook.value = null;
+      selectedWishedBook.value = null;
+
+      currentStep.value = 1;
+    }
+
     async function submitForm() {
       try {
         await store.dispatch("addBookPost", {
@@ -277,8 +279,13 @@ export default {
           wishedBook_id: selectedWishedBook.value,
           offerer_id: userId.value,
         });
+
+        // Refresh the book posts list
         await store.dispatch("fetchBookPosts");
+
         active.value = false;
+        // Reset the form
+        resetForm();
       } catch (error) {
         console.error("Failed to submit book post:", error);
       }
@@ -298,6 +305,7 @@ export default {
       triggerFileInput,
       removeImage,
       submitForm,
+      resetForm,
       selectedOfferedBook,
       selectedWishedBook,
     };
